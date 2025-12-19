@@ -59,7 +59,7 @@ fun RecipeListScreen(navController: NavHostController) {
         RecipeData.recipes.forEach { recipe ->
         RecipeItem(recipe = recipe, onClick = {
                 navController.navigate(
-                    "recipe_${recipe.id}"
+                    "recipe/${recipe.id}"
                 )
             })
             Spacer(modifier = Modifier.height(10.dp))

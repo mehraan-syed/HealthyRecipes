@@ -22,6 +22,9 @@ import com.uog.healthyrecipes.data.RecipeData
 import com.uog.healthyrecipes.ui.theme.HealthyRecipesTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+
 
 
 
@@ -89,26 +92,22 @@ fun RecipeNavHost(navController : NavHostController,
         }
         composable("help") { HelpScreen() }
 
-        composable("recipe_1") {
-            RecipeScreen(
-                recipe = RecipeData.recipes[0],
-                isFavourite = recipeViewModel.uiState.favouriteIds.contains(1),
-                onToggleFavourite = { recipeViewModel.toggleFavourite(1) }
-            )
-        }
-        composable("recipe_2") {
-            RecipeScreen(
-                recipe = RecipeData.recipes[1],
-                isFavourite = recipeViewModel.uiState.favouriteIds.contains(2),
-                onToggleFavourite = { recipeViewModel.toggleFavourite(2) }
-            )
-        }
-        composable("recipe_3") {
-                    RecipeScreen(
-                        recipe = RecipeData.recipes[2],
-                        isFavourite = recipeViewModel.uiState.favouriteIds.contains(3),
-                        onToggleFavourite = { recipeViewModel.toggleFavourite(3) }
-                    )
-                }
+        composable(
+            route = "recipe/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: -1
+            val recipe = RecipeData.recipes.firstOrNull { it.id == id }
+
+            if (recipe == null) {
+                NotFoundScreen() // we’ll create this file next
+            } else {
+                RecipeScreen(
+                    recipe = recipe,
+                    isFavourite = recipeViewModel.uiState.favouriteIds.contains(recipe.id),
+                    onToggleFavourite = { recipeViewModel.toggleFavourite(recipe.id) }
+                )
             }
         }
+    }
+}
