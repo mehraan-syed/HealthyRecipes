@@ -24,8 +24,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+
 
 
 
@@ -41,9 +42,11 @@ class MainActivity : ComponentActivity() {
                 val favouriteRecipeIds = remember { mutableStateListOf<Int>() }
 
                 LaunchedEffect(Unit) {
-                    val loaded = withContext(Dispatchers.IO){
+                    val loadedIds = withContext(Dispatchers.IO){
                         FavouritesStorage.load(context)
                     }
+                    favouriteRecipeIds.clear()
+                    favouriteRecipeIds.addAll(loadedIds)
                 }
                 Scaffold(
                     topBar = {
