@@ -17,7 +17,7 @@ import com.uog.healthyrecipes.data.RecipeData
 @Composable
 fun FavouritesScreen(
     navController: NavHostController,
-    favouriteRecipeIds: MutableList<Int>
+    favouriteRecipeIds: List<Int>
 ) {
     val favouriteRecipes = RecipeData.recipes.filter { favouriteRecipeIds.contains(it.id) }
 

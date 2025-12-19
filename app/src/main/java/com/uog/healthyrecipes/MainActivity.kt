@@ -14,19 +14,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.uog.healthyrecipes.data.RecipeData
 import com.uog.healthyrecipes.ui.theme.HealthyRecipesTheme
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelProvider
+
 
 
 class MainActivity : ComponentActivity() {
@@ -37,16 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             HealthyRecipesTheme {
                 val navController = rememberNavController()
-                val context = LocalContext.current
-                val favouriteRecipeIds = remember { mutableStateListOf<Int>() }
-
-                LaunchedEffect(Unit) {
-                    val loadedIds = withContext(Dispatchers.IO){
-                        FavouritesStorage.load(context)
-                    }
-                    favouriteRecipeIds.clear()
-                    favouriteRecipeIds.addAll(loadedIds)
-                }
+                val recipeViewModel: RecipeViewModel = viewModel(factory = ViewModelProvider.AndroidViewModelFactory(application))
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -62,7 +49,7 @@ class MainActivity : ComponentActivity() {
                     RecipeNavHost(
                         navController = navController,
                         paddingValues = paddingValues,
-                        favouriteRecipeIds = favouriteRecipeIds
+                        recipeViewModel = recipeViewModel
                     )
                 }
             }
@@ -75,41 +62,46 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RecipeNavHost(navController : NavHostController,
                   paddingValues: PaddingValues,
-                  favouriteRecipeIds: MutableList<Int>
-    )
-{
+                  recipeViewModel: RecipeViewModel
+    ) {
+
+
     NavHost(
         navController = navController,
         startDestination = "recipe_list",
-        Modifier.padding(paddingValues)) {
-        composable("recipe_list"){
-            RecipeListScreen(navController = navController)}
-        composable("favourites"){
+        Modifier.padding(paddingValues)
+    ) {
+        composable("recipe_list") {
+            RecipeListScreen(navController = navController)
+        }
+        composable("favourites") {
             FavouritesScreen(
                 navController = navController,
-                favouriteRecipeIds = favouriteRecipeIds) }
-        composable("help") {HelpScreen()}
+                favouriteRecipeIds = recipeViewModel.uiState.favouriteIds.toList()
+            )
+        }
+        composable("help") { HelpScreen() }
 
-        composable("recipe_1"){
-            RecipeScreen( RecipeData.recipes[0],
-                favouriteRecipeIds = favouriteRecipeIds)}
-        composable("recipe_2"){
-            RecipeScreen(RecipeData.recipes[1],
-                favouriteRecipeIds = favouriteRecipeIds)}
-        composable("recipe_3"){
-            RecipeScreen(RecipeData.recipes[2],
-                favouriteRecipeIds = favouriteRecipeIds)}
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun RecipeNavHostPreview() {
-    HealthyRecipesTheme {
-        val navController = rememberNavController()
-        RecipeNavHost(navController = navController,
-            paddingValues = PaddingValues(),
-            favouriteRecipeIds = mutableListOf())
+        composable("recipe_1") {
+            RecipeScreen(
+                recipe = RecipeData.recipes[0],
+                isFavourite = recipeViewModel.uiState.favouriteIds.contains(1),
+                onToggleFavourite = { recipeViewModel.toggleFavourite(1) }
+            )
+            composable("recipe_2") {
+                RecipeScreen(
+                    recipe = RecipeData.recipes[1],
+                    isFavourite = recipeViewModel.uiState.favouriteIds.contains(2),
+                    onToggleFavourite = { recipeViewModel.toggleFavourite(2) }
+                )
+                composable("recipe_3") {
+                    RecipeScreen(
+                        recipe = RecipeData.recipes[2],
+                        isFavourite = recipeViewModel.uiState.favouriteIds.contains(3),
+                        onToggleFavourite = { recipeViewModel.toggleFavourite(3) }
+                    )
+                }
+            }
+        }
     }
 }

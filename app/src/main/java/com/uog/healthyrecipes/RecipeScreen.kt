@@ -20,18 +20,14 @@ import androidx.compose.ui.unit.dp
 import com.uog.healthyrecipes.data.*
 import com.uog.healthyrecipes.ui.theme.HealthyRecipesTheme
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 @Composable
-fun RecipeScreen(recipe: Recipe, favouriteRecipeIds: MutableList<Int>) {
+fun RecipeScreen(recipe: Recipe, isFavourite: Boolean, onToggleFavourite: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val isFavourite = favouriteRecipeIds.contains(recipe.id)
 
     Column(
         modifier = Modifier
@@ -54,19 +50,8 @@ fun RecipeScreen(recipe: Recipe, favouriteRecipeIds: MutableList<Int>) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = {
-                if (isFavourite) {
-                    favouriteRecipeIds.remove(recipe.id)
-                } else {
-                    favouriteRecipeIds.add(recipe.id)
-                }
-
-                scope.launch(Dispatchers.IO) {
-                    FavouritesStorage.save(context, favouriteRecipeIds)
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors()
+            onClick = onToggleFavourite,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = if (isFavourite) "★ Remove from favourites" else "☆ Add to favourites"
@@ -95,6 +80,7 @@ fun RecipeScreen(recipe: Recipe, favouriteRecipeIds: MutableList<Int>) {
 fun PreviewRecipeScreen(){
     HealthyRecipesTheme {
         RecipeScreen(recipe = RecipeData.recipes[0],
-            favouriteRecipeIds = mutableListOf())
+            isFavourite = false,
+            onToggleFavourite = {})
     }
 }
