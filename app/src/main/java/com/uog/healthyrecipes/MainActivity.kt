@@ -50,6 +50,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                                 actions = {
+                                    TextButton(onClick = { navController.navigate("favourites") }) {
+                                        Text("Favourites (${recipeViewModel.uiState.favouriteIds.size})")
+                                    }
                                     TextButton(onClick = {navController.navigate("help")}){
                                         Text("Help")
                                 }

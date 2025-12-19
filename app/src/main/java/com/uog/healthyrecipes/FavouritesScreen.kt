@@ -37,8 +37,9 @@ fun FavouritesScreen(
         if (favouriteRecipes.isEmpty()) {
             Text(
                 text = "No favourites yet. Star a recipe to add it here.",
-                style = MaterialTheme.typography.bodySmall
-            )
+                style = MaterialTheme.typography.bodyMedium)
+                return
+
         } else {
             favouriteRecipes.forEach { recipe ->
                 RecipeItem(
