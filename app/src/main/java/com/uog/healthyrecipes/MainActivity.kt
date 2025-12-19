@@ -67,10 +67,13 @@ fun RecipeNavHost(navController : NavHostController,
         startDestination = "recipe_list",
         Modifier.padding(paddingValues)) {
         composable("recipe_list"){
-            RecipeListScreen(
+            RecipeListScreen(navController = navController)}
+        composable("favourites"){
+            FavouritesScreen(
                 navController = navController,
-                favouriteRecipeIds = favouriteRecipeIds)}
-
+                favouriteRecipeIds = favouriteRecipeIds
+            )
+        }
         composable("recipe_1"){
             RecipeScreen( RecipeData.recipes[0],
                 favouriteRecipeIds = favouriteRecipeIds)}
