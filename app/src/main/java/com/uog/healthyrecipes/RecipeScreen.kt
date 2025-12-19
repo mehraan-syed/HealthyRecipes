@@ -21,12 +21,18 @@ import com.uog.healthyrecipes.data.*
 import com.uog.healthyrecipes.ui.theme.HealthyRecipesTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun RecipeScreen(recipe: Recipe, favouriteRecipeIds: MutableList<Int>) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val isFavourite = favouriteRecipeIds.contains(recipe.id)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,6 +59,10 @@ fun RecipeScreen(recipe: Recipe, favouriteRecipeIds: MutableList<Int>) {
                     favouriteRecipeIds.remove(recipe.id)
                 } else {
                     favouriteRecipeIds.add(recipe.id)
+                }
+
+                scope.launch(Dispatchers.IO) {
+                    FavouritesStorage.save(context, favouriteRecipeIds)
                 }
             },
             modifier = Modifier.fillMaxWidth(),

@@ -22,6 +22,11 @@ import com.uog.healthyrecipes.data.RecipeData
 import com.uog.healthyrecipes.ui.theme.HealthyRecipesTheme
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 
 
 class MainActivity : ComponentActivity() {
@@ -32,14 +37,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             HealthyRecipesTheme {
                 val navController = rememberNavController()
+                val context = LocalContext.current
                 val favouriteRecipeIds = remember { mutableStateListOf<Int>() }
+
+                LaunchedEffect(Unit) {
+                    val loaded = withContext(Dispatchers.IO){
+                        FavouritesStorage.load(context)
+                    }
+                }
                 Scaffold(
                     topBar = {
                         TopAppBar(
                             title = {
-                                Text(
-                                    text = stringResource(id = R.string.app_name)
-                                )
+                                Text(text = stringResource(id = R.string.app_name))
                             }
                         )
                     }) { paddingValues ->
