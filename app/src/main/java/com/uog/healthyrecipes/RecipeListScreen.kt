@@ -28,13 +28,21 @@ import androidx.navigation.compose.rememberNavController
 import com.uog.healthyrecipes.data.*
 import com.uog.healthyrecipes.ui.theme.HealthyRecipesTheme
 import androidx.compose.material3.Button
-
-
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.*
 
 
 @Composable
 fun RecipeListScreen(navController: NavHostController) {
+    var query by remember { mutableStateOf("") }
 
+    val filtered = RecipeData.recipes.filter { recipe ->
+        recipe.title.contains(query, ignoreCase = true) ||
+                recipe.description.contains(query, ignoreCase = true)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,13 +64,27 @@ fun RecipeListScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        RecipeData.recipes.forEach { recipe ->
-        RecipeItem(recipe = recipe, onClick = {
-                navController.navigate(
-                    "recipe/${recipe.id}"
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            label = { Text("Search recipes") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(filtered) { recipe ->
+                RecipeItem(
+                    recipe = recipe,
+                    onClick = {
+                        navController.navigate("recipe/${recipe.id}")
+                    }
                 )
-            })
-            Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+            }
         }
     }
 }
