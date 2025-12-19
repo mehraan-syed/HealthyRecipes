@@ -2,6 +2,9 @@ package com.uog.healthyrecipes
 
 import android.content.Context
 
+/**
+Handles saving and loading favourite recipe IDs locally.
+*/
 object FavouritesStorage {
 
     private const val FILE_NAME = "favourites.txt"

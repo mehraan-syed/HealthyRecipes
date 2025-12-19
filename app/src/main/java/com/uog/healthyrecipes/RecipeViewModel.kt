@@ -11,6 +11,11 @@ import com.uog.healthyrecipes.data.RecipeData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ViewModel responsible for managing recipe-related UI state. It loads and saves favourite recipes
+using background coroutines and exposes immutable state to Jetpack Compose screens.
+*/
+
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
     var uiState by mutableStateOf(RecipeUiState(recipes = RecipeData.recipes))

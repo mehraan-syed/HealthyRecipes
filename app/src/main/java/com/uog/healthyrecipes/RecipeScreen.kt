@@ -23,6 +23,10 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 
+/**
+ * Displays detailed information about a recipe.
+ * Allows the user to add or remove the recipe from favourites.
+ */
 
 @Composable
 fun RecipeScreen(recipe: Recipe, isFavourite: Boolean, onToggleFavourite: () -> Unit) {

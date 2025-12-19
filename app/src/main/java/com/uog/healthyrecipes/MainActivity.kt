@@ -38,7 +38,14 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             title = {
-                                Text(text = stringResource(id = R.string.app_name))},
+                                androidx.compose.foundation.layout.Column {
+                                    Text(text = stringResource(id = R.string.app_name))
+                                    Text(
+                                        text = "A start to a healthy life.",
+                                        style = androidx.compose.material3.MaterialTheme.typography.bodySmall
+                                    )
+                                }
+                            },
                                 actions = {
                                     TextButton(onClick = {navController.navigate("help")}){
                                         Text("Help")
@@ -88,13 +95,15 @@ fun RecipeNavHost(navController : NavHostController,
                 isFavourite = recipeViewModel.uiState.favouriteIds.contains(1),
                 onToggleFavourite = { recipeViewModel.toggleFavourite(1) }
             )
-            composable("recipe_2") {
-                RecipeScreen(
-                    recipe = RecipeData.recipes[1],
-                    isFavourite = recipeViewModel.uiState.favouriteIds.contains(2),
-                    onToggleFavourite = { recipeViewModel.toggleFavourite(2) }
-                )
-                composable("recipe_3") {
+        }
+        composable("recipe_2") {
+            RecipeScreen(
+                recipe = RecipeData.recipes[1],
+                isFavourite = recipeViewModel.uiState.favouriteIds.contains(2),
+                onToggleFavourite = { recipeViewModel.toggleFavourite(2) }
+            )
+        }
+        composable("recipe_3") {
                     RecipeScreen(
                         recipe = RecipeData.recipes[2],
                         isFavourite = recipeViewModel.uiState.favouriteIds.contains(3),
@@ -103,5 +112,3 @@ fun RecipeNavHost(navController : NavHostController,
                 }
             }
         }
-    }
-}

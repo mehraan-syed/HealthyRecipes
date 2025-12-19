@@ -1,6 +1,10 @@
 package com.uog.healthyrecipes
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,29 +18,37 @@ fun HelpScreen() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("Help / About", style = MaterialTheme.typography.headlineSmall)
-        Spacer(Modifier.height(12.dp))
+        Text(
+            text = "About Healthy Recipes",
+            style = MaterialTheme.typography.headlineSmall
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            "Healthy eating made easy!",
+            text = "An app designed to make your journey into eating healthy and delicious food easier.",
             style = MaterialTheme.typography.bodyMedium
         )
-        Spacer(Modifier.height(12.dp))
 
-        Text("How to use:", style = MaterialTheme.typography.titleMedium)
-        Spacer(Modifier.height(6.dp))
-        Text("• Tap a recipe to view details.", style = MaterialTheme.typography.bodyMedium)
-        Text("• Tap ★ to add/remove favourites.", style = MaterialTheme.typography.bodyMedium)
-        Text("• Use the Favourites page to remember the delicious ones.", style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(12.dp))
 
-        Spacer(Modifier.height(16.dp))
-        Text("Data Storage:", style = MaterialTheme.typography.titleMedium)
-        Spacer(Modifier.height(6.dp))
-        Text("• Never miss shopping with offline saving.", style = MaterialTheme.typography.bodyMedium)
+        Text(
+            text = "Features:",
+            style = MaterialTheme.typography.titleMedium
+        )
 
-        Spacer(Modifier.height(16.dp))
-        Text("Version:", style = MaterialTheme.typography.titleMedium)
-        Spacer(Modifier.height(6.dp))
-        Text("• v1.0", style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text("• Browse a list of healthy recipes")
+        Text("• View detailed recipe information")
+        Text("• Mark recipes as favourites")
+        Text("• Favourites are saved automatically")
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Happy healthy living!",
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
