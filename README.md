@@ -27,3 +27,8 @@ Healthy Recipes is an android application designed to help users find and save h
 ## How to run
 - Compile the project using gradle and run through an emulator or physical device.
 
+## AI Usage 
+- Agent and Co-pilot were used for library debugging and formalising the tone of Kdocs.
+
+## Author
+https://github.com/mehraan-syed
