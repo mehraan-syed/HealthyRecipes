@@ -27,10 +27,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.uog.healthyrecipes.data.*
 import com.uog.healthyrecipes.ui.theme.HealthyRecipesTheme
+import androidx.compose.material3.Checkbox
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+
 
 
 @Composable
-fun RecipeListScreen(navController: NavHostController) {
+fun RecipeListScreen(navController: NavHostController,
+                     favouriteRecipeIds: MutableList<Int>) {
+    var showFavouritesOnly by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -42,8 +50,29 @@ fun RecipeListScreen(navController: NavHostController) {
             style = MaterialTheme.typography.headlineSmall
         )
         Spacer(modifier = Modifier.height(20.dp))
-        RecipeData.recipes.forEach { recipe ->
-            RecipeItem(recipe = recipe, onClick = {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = showFavouritesOnly,
+                onCheckedChange = { showFavouritesOnly = it }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Show favourites only")
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        val recipesToShow = if (showFavouritesOnly) {
+            RecipeData.recipes.filter { favouriteRecipeIds.contains(it.id) }
+        } else {
+            RecipeData.recipes
+        }
+
+        recipesToShow.forEach { recipe ->
+        RecipeItem(recipe = recipe, onClick = {
                 navController.navigate(
                     "recipe_${recipe.id}"
                 )
@@ -88,6 +117,7 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
 fun PreviewRecipeListScreen(){
     HealthyRecipesTheme {
         val navController = rememberNavController()
-        RecipeListScreen(navController = navController)
+        RecipeListScreen(navController = navController,
+            favouriteRecipeIds = mutableListOf(1))
     }
 }
