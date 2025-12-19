@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,8 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
-
-
 
 
 class MainActivity : ComponentActivity() {
@@ -52,7 +51,11 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             title = {
-                                Text(text = stringResource(id = R.string.app_name))
+                                Text(text = stringResource(id = R.string.app_name))},
+                                actions = {
+                                    TextButton(onClick = {navController.navigate("help")}){
+                                        Text("Help")
+                                }
                             }
                         )
                     }) { paddingValues ->
@@ -84,9 +87,9 @@ fun RecipeNavHost(navController : NavHostController,
         composable("favourites"){
             FavouritesScreen(
                 navController = navController,
-                favouriteRecipeIds = favouriteRecipeIds
-            )
-        }
+                favouriteRecipeIds = favouriteRecipeIds) }
+        composable("help") {HelpScreen()}
+
         composable("recipe_1"){
             RecipeScreen( RecipeData.recipes[0],
                 favouriteRecipeIds = favouriteRecipeIds)}
